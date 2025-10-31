@@ -22,5 +22,17 @@ fun main() {
 
     val map = DemoMap.createMap()
     println("Original map: $map")
-    TODO()
+
+    val maxValue = DemoMap.maxValue(map)
+    println("Max value: $maxValue")
+
+    val keyForMax = DemoMap.keyForMaxValue(map)
+    println("Key for max value: $keyForMax")
+
+    val sortedByValue = DemoMap.sortByValueDesc(map)
+    println("Sorted by value desc: $sortedByValue")
+
+    val filteredOdd = DemoMap.filterOddValues(map)
+    println("Filtered odd values: $filteredOdd")
+
 }
