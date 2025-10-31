@@ -18,7 +18,7 @@ object DemoList {
     }
 
     fun multiplyList(): List<Int> {
-        return list.map { it * it }
+        return list.map { it * 2 }
     }
 
     fun maxElement(): Int {
