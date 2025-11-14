@@ -33,16 +33,13 @@ class SpendingCategoryDiversityRule(
         val uniqueCategories = mutableSetOf<TransactionCategory>()
 
         for (transaction in transactions) {
-            if (transaction.date.isAfter(threeMonthsAgo) &&
-                transaction.category != TransactionCategory.TRANSFER &&
-                transaction.amount < 0
-            ) {
+            if (transaction.date.isAfter(threeMonthsAgo)) {
                 uniqueCategories.add(transaction.category)
             }
         }
         val risk = when {
             uniqueCategories.size < 3 -> PaymentRisk.HIGH
-            uniqueCategories.size <= 3 -> PaymentRisk.MEDIUM
+            uniqueCategories.size <= 6 -> PaymentRisk.MEDIUM
             else -> PaymentRisk.LOW
         }
         return ScoringResult(ruleName, risk)

@@ -28,7 +28,7 @@ class TransactionCountRule(
         var recentTransactionCount = 0
 
         for (transaction in transactions) {
-            if (transaction.date.isBefore(oneMonthAgo)) recentTransactionCount++
+            if (transaction.date.isAfter(oneMonthAgo)) recentTransactionCount++
         }
 
         val risk = when {

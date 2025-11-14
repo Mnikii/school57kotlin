@@ -26,7 +26,7 @@ class IncomeExpenseRatioRule(
     private val transactionRepo: TransactionRepository
 ) : ScoringRule {
 
-    override val ruleName: String = "Loan Count"
+    override val ruleName: String = "Income Expense Ratio"
 
     override fun evaluate(client: Client): ScoringResult {
         val threeMonthsAgo = LocalDateTime.now().minusMonths(3)
@@ -34,22 +34,23 @@ class IncomeExpenseRatioRule(
 
         var totalIncome = 0.0
         var totalExpenses = 0.0
+        var hasRecentTransactions = false
 
         for (transaction in transactions) {
             if (transaction.date.isAfter(threeMonthsAgo)) {
+                hasRecentTransactions = true
                 if (transaction.category == TransactionCategory.SALARY) {
                     totalIncome += transaction.amount
                 } else {
-                    if (transaction.amount < 0) totalExpenses -= transaction.amount
-                    else totalExpenses += transaction.amount
+                    totalExpenses += transaction.amount
                 }
             }
         }
-        val ratio = if (totalIncome > 0) totalExpenses / totalIncome else 1.0
+        if (!hasRecentTransactions) return ScoringResult(ruleName, PaymentRisk.HIGH)
 
         val risk = when {
             totalExpenses > totalIncome -> PaymentRisk.HIGH
-            ratio >= 0.8 && ratio <= 1.2 -> PaymentRisk.MEDIUM
+            totalExpenses / totalIncome >= 0.8 -> PaymentRisk.MEDIUM
             else -> PaymentRisk.LOW
         }
         return ScoringResult(ruleName, risk)
