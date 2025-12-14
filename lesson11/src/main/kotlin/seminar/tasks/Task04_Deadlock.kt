@@ -13,7 +13,36 @@ object Deadlock {
      * Внимание: этот метод зависнет! Используйте только для демонстрации.
      */
     fun runDeadlock() {
-        TODO("Реализуйте пример deadlock")
+        val resourceA = Any()
+        val resourceB = Any()
+
+        val thread1 = Thread(Runnable {
+            synchronized(resourceA) {
+                println("thread1: lock resource A")
+                Thread.sleep(500)
+                synchronized(resourceB) {
+                    Thread.sleep(500)
+                    println("thread1: lock resource B")
+                }
+            }
+        })
+
+        val thread2 = Thread(Runnable {
+            synchronized(resourceA) {
+                println("thread1: lock resource A")
+                Thread.sleep(500)
+                synchronized(resourceB) {
+                    Thread.sleep(500)
+                    println("thread1: lock resource B")
+                }
+            }
+        })
+
+        thread1.start()
+        thread2.start()
+        thread1.join()
+        thread2.join()
+
     }
 
     /**
@@ -23,6 +52,33 @@ object Deadlock {
      * @return true если оба потока успешно завершились
      */
     fun runFixed(): Boolean {
-        TODO("Реализуйте версию без deadlock")
+        val resourceA = Any()
+        val resourceB = Any()
+
+        val thread1 = Thread(Runnable {
+            synchronized(resourceA) {
+                println("thread1: lock resource A")
+                Thread.sleep(500)
+                synchronized(resourceB) {
+                    Thread.sleep(500)
+                    println("thread1: lock resource B")
+                }
+            }
+        })
+
+        val thread2 = Thread(Runnable {
+            synchronized(resourceA) {
+                println("thread1: lock resource A")
+                Thread.sleep(500)
+                synchronized(resourceB) {
+                    Thread.sleep(500)
+                    println("thread1: lock resource B")
+                }
+            }
+        })
+
+        thread1.start()
+        thread2.start()
+        return true
     }
 }
