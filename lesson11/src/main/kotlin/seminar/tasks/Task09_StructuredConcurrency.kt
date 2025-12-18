@@ -1,8 +1,10 @@
 package seminar.tasks
 
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -18,22 +20,27 @@ object StructuredConcurrency {
      * @return количество корутин, которые успели завершиться до отмены
      */
     fun run(failingCoroutineIndex: Int): Int = runBlocking {
-        val atomicInteger = AtomicInteger(0)
+        val completedCount = AtomicInteger(0)
+
         try {
-            coroutineScope {
-                repeat(5) {
+            withContext(NonCancellable) {
+                repeat(5) { index ->
                     launch {
-                        if (atomicInteger.get() == failingCoroutineIndex) {
-                            throw RuntimeException("Failing coroutine index $atomicInteger")
+                        if (index == failingCoroutineIndex) {
+                            delay(100)
+                            throw RuntimeException("Coroutine $index failed!")
+                        } else {
+                            delay(200)
+                            completedCount.incrementAndGet()
+                            println("Coroutine $index completed")
                         }
-                        atomicInteger.incrementAndGet()
                     }
                 }
             }
+        } catch (e: RuntimeException) {
+            println("Caught exception: ${e.message}")
         }
-        catch (ex: RuntimeException){
-            println("Hook exeption with message: ${ex.message}")
-        }
-        atomicInteger.get()
+
+        completedCount.get()
     }
 }

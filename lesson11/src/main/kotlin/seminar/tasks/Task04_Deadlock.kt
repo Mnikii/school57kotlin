@@ -16,33 +16,32 @@ object Deadlock {
         val resourceA = Any()
         val resourceB = Any()
 
-        val thread1 = Thread(Runnable {
+        val thread1 = Thread {
             synchronized(resourceA) {
-                println("thread1: lock resource A")
-                Thread.sleep(500)
+                println("Thread1: holding A, waiting for B...")
+                Thread.sleep(100)
                 synchronized(resourceB) {
-                    Thread.sleep(500)
-                    println("thread1: lock resource B")
+                    println("Thread1: got both!")
                 }
             }
-        })
+        }
 
-        val thread2 = Thread(Runnable {
-            synchronized(resourceA) {
-                println("thread1: lock resource A")
-                Thread.sleep(500)
-                synchronized(resourceB) {
-                    Thread.sleep(500)
-                    println("thread1: lock resource B")
+        val thread2 = Thread {
+            synchronized(resourceB) {
+                println("Thread2: holding B, waiting for A...")
+                Thread.sleep(100)
+                synchronized(resourceA) {
+                    println("Thread2: got both!")
                 }
             }
-        })
+        }
 
         thread1.start()
         thread2.start()
+
+        // Это зависнет навсегда!
         thread1.join()
         thread2.join()
-
     }
 
     /**
@@ -55,30 +54,33 @@ object Deadlock {
         val resourceA = Any()
         val resourceB = Any()
 
-        val thread1 = Thread(Runnable {
+        val thread1 = Thread {
             synchronized(resourceA) {
-                println("thread1: lock resource A")
-                Thread.sleep(500)
+                println("Thread1: holding A...")
+                Thread.sleep(100)
                 synchronized(resourceB) {
-                    Thread.sleep(500)
-                    println("thread1: lock resource B")
+                    println("Thread1: got both!")
                 }
             }
-        })
+        }
 
-        val thread2 = Thread(Runnable {
+        val thread2 = Thread {
+            // Захватываем в том же порядке: сначала A, потом B
             synchronized(resourceA) {
-                println("thread1: lock resource A")
-                Thread.sleep(500)
+                println("Thread2: holding A...")
+                Thread.sleep(100)
                 synchronized(resourceB) {
-                    Thread.sleep(500)
-                    println("thread1: lock resource B")
+                    println("Thread2: got both!")
                 }
             }
-        })
+        }
 
         thread1.start()
         thread2.start()
+
+        thread1.join()
+        thread2.join()
+
         return true
     }
 }
