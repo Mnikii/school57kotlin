@@ -1,0 +1,5 @@
+lesson9/logs/app.logs:2025-01-01 ERROR Failed to connect to metrics service
+lesson9/logs/app.logs:2025-01-01 ERROR Metrics service unreachable
+lesson9/logs/errors.logs:[ERROR] Database timeout at 12:01
+lesson9/logs/errors.logs:[ERROR] Cache synchronization failed
+lesson9/logs/old/legacy.logs:2019-12-01 ERROR Legacy component crashed

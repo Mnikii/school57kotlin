@@ -10,7 +10,7 @@ import java.util.zip.ZipOutputStream
 class Archiver(
     private val extensions: Set<String> = setOf("txt", "log")
 ) {
-    fun addDirectoryToZip(
+    fun     addDirectoryToZip(
         rootDir: File,
         currentFile: File,
         zipos: ZipOutputStream
