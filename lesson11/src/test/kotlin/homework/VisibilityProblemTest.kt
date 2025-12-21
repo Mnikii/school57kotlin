@@ -1,6 +1,6 @@
 package homework
 
-import VisibilityProblem
+import homework.VisibilityProblem
 import org.junit.jupiter.api.Test
 import kotlin.test.assertFalse
 

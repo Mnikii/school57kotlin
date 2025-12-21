@@ -1,3 +1,5 @@
+package homework
+
 /**
  *
  * Проблема:
@@ -7,7 +9,7 @@
  *
  */
 class VisibilityProblem {
-
+    @Volatile
     private var running = true
 
     /**
@@ -38,7 +40,7 @@ class VisibilityProblem {
             println("Reader: начал работу (ждет running = false)")
 
             while (running) {
-
+                Thread.yield()
             }
 
             println("Reader: завершил работу (увидел running = false)")
